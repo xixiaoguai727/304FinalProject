@@ -1,5 +1,6 @@
 # 304FinalProject
 Option b: Build a MRP model based on the CES and a post- stratification dataset that you obtain, to identify how the 2019 Canadian Federal Election would have been different if ‘everyone’ had voted. What do we learn about the importance of turnout based on your model and results?
+# Raw Data
 Data are come form https://sda-artsci-utoronto-ca.myaccess.library.utoronto.ca/cgi-bin/sda/hsda?harcsda4+gss30 and https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DUS88V
 # Predicting the Percentage of Votes Obtained by Liberal in 2019 Canadian Federal Election If Everyone Can Vote Using Logistic Regression With Post-stratification
 
