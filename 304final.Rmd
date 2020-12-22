@@ -3,8 +3,8 @@ title: "Predicting the Percentage of Votes Obtained by Liberal in 2019 Canadian 
 author: "Xi Zheng 1005153628"
 date: "2020/12/21"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 
@@ -64,12 +64,14 @@ Table 1: Five Independent Variables Used in the Regression Model \newline
 
 #### Model     \newline  
 ```{r, include=FALSE}
+# build the logistic model
 model1 <- glm(voteLiberal ~gender + employment + marital + edu + province + income, data = survey_data, family = binomial)
 summary(model1)
 
 ```
 
 ```{r, include=FALSE}
+# doing the step wise regression
 back1=step(model1, direction = "backward")
 ```
 ```{r, include=FALSE}
@@ -79,6 +81,7 @@ summary(model2)
 
 
 ```{r, include=FALSE}
+# post-stratification for Liberal
 census_data$logodds_estimate <-
   model2 %>%
   predict(newdata = census_data)
@@ -96,11 +99,13 @@ census_data %>%
 ```
 
 ```{r, include=FALSE}
+# build model for Conservative
 model3 <- glm(voteCon ~ gender + marital + edu + province, data = survey_data, family = binomial)
 
 ```
 
 ```{r, include=FALSE}
+# post-stratification  for Conservative
 census_data$logodds_estimate <-
   model3 %>%
   predict(newdata = census_data)
@@ -127,9 +132,11 @@ Our original model containing six variables has an AIC value of 9231.3, and afte
 This is the equation we get:
 $$ log(\frac{p}{1-p})= \beta_0+\beta_1  x_{male} + \beta_2 x_{Living common-law     
 } + \beta_3 x_{maritalMarried} + ... + \beta_{21} x_{Saskatchewan}$$
-p stands for the probability of a random person in Canada would vote for Liberal. Variable Living common-law means, if the person’s marital status is Living common-law, then the value of x_{Living common-law} will be 1, otherwise, it will be 0. The same word applies to all 21 x variables. Beta1 to beta21 in Table 2(result section) represents 21 beta coefficients in our equation. Beta0(-1.61948) is the intercept parameter. When all 21 x variables equal to zero, only beta0 is left, after taking log-off, we get p equals to 0.17. This can be interpreted as the probability of a widowed female with a Bachelor’s degree lived in Alberta vote a Liberal is about 17%. \newline
+p stands for the probability of a random person in Canada would vote for Liberal. Variable Living common-law means, if the person’s marital status is Living common-law, then the value of $x_{Living common-law}$ will be 1, otherwise, it will be 0. The same word applies to all 21 x variables. $\beta_1$ to $\beta_{21}$ in Table 2(result section) represents 21 beta coefficients in our equation. $\beta_0$(-1.61948) is the intercept parameter. When all 21 x variables equal to zero, only $\beta_0$ is left, after taking log-off, we get p equals to 0.17. This can be interpreted as the probability of a widowed female with a Bachelor’s degree lived in Alberta vote a Liberal is about 17%. \newline
 
 Next, we perform a post-stratification analysis using the same four predictor variables in our cleaned GSS data set and the regression model we got above to get the estimated proportion of voting for Liberal.
+
+\newpage
 
 ## Results
 
@@ -167,13 +174,13 @@ We firstly clean CPS and GSS data set to our desired form, then we build a logis
 #### Conclusion  \newline
 
 Our result shows that Conservative get 2.08% more votes than Liberal. Compared to the actual percentage difference of 1.22%, Conservative still be more popular than Liberal.
-However, the election result is not based on how many votes each party wins, is based on how many seats each party wins. Based on the actual results, Liberal got 184 seats compared to Conservative got 99, but the probability of 0.86% vote change the election result is very low. Thus, no matter whether everyone in Canada can vote, Conservative is always more popular than Liberal, but Liberal would win the election anyway. \newline
+However, the election result is not based on how many votes each party wins, is based on how many seats each party wins. Based on the actual results, Liberal got 184 seats compared to Conservative got 99, but the probability of 0.86% vote change the election result is very low. Therefore, no matter whether everyone in Canada can vote, Conservative is always more popular than Liberal, but Liberal would win the election anyway. \newline
 
-To sum up, whether there exists Eligibility Requirements for voters will not change the final election result and vote percentage. Existing policies in Canada will continue, such as the legalization of cannabis, and will not be improved.
+To sum up, whether there exists eligibility requirements for voters will not change the final election result and vote percentage. If everyone in Canada can vote, Liberal would still win the election with the percentage vote obtained less than Conservative. Thus, existing policies in Canada would continue, such as the legalization of cannabis, and would not be improved.
 
 #### Weakness & Next Steps  \newline
 
-There are still some weaknesses and limitations in our analysis. As we mentioned in the data section, people may vote for a different party than they stated in the Campaign Period Survey, which lowers the result accuracy of our prediction model. The census data set we use is from the 2016 General social survey, which is obtained three years before the election happens, demographic characteristics may change in those three years. Also, the number of observations in the cleaned GSS data set is smaller than the cleaned CES data set. Therefore, the 2016 GSS survey is not a very perfect census data set.  \newline
+There are still some weaknesses and limitations in our analysis. As we mentioned in the data section, people may vote for a different party than they stated in the Campaign Period Survey, which lowers the result accuracy of our prediction model. The census data set we use is from the 2016 General social survey, which is obtained three years before the election happens, demographic characteristics may change in those three years. Also, the number of observations in the cleaned GSS data set is smaller than the cleaned CES data set, which makes our post-stratification part become less accurate. Therefore, the 2016 GSS survey is not a very perfect census data set.  \newline
 
 There are still a few things we could do in the future to make improvements. We can find a larger and nicer data set as our census data, find more significant predictor variables, and do the regression again to get a better result. We also can compute the number of seats each party would obtain if every in Canada can vote to see if the result would be different.
 
